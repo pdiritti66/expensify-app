@@ -1,7 +1,7 @@
 import moment from 'moment';
 
 // Get visible expenses
-//utilizzo metodo isSameOrBefore
+
 export default (expenses, { text, sortBy, startDate, endDate }) => {
   return expenses.filter((expense) => {
     const createdAtMoment = moment(expense.createdAt);
