@@ -1,7 +1,7 @@
 import moment from 'moment';
 
 // Filters Reducer
-
+//impostazione di default di start date e end date con moment
 const filtersReducerDefaultState = {
   text: '',
   sortBy: 'date',
