@@ -39,4 +39,5 @@ export default (state = filtersReducerDefaultState, action) => {
     default:
       return state;
   }
+  console.log("filter.js reducer " + state + " " + action);
 };

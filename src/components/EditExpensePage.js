@@ -5,6 +5,7 @@ import { editExpense, removeExpense } from '../actions/expenses';
 
 export class EditExpensePage extends React.Component {
   onSubmit = (expense) => {
+    console.log("EditExpensePage.js" + expense);
     this.props.editExpense(this.props.expense.id, expense);
     this.props.history.push('/');
   };
@@ -28,8 +29,9 @@ export class EditExpensePage extends React.Component {
 const mapStateToProps = (state, props) => ({
   expense: state.expenses.find((expense) => expense.id === props.match.params.id)
 });
-
-const mapDispatchToProps = (dispatch, props) => ({
+//expense è dato da mapStateToProps connesso a mapDispatchToProps che eredita lo state(elenco)
+// e le props: <Route path="/edit/:id" component={EditExpensePage} />
+const mapDispatchToProps = (dispatch) => ({
   editExpense: (id, expense) => dispatch(editExpense(id, expense)),
   removeExpense: (data) => dispatch(removeExpense(data))
 });

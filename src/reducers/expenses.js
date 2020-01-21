@@ -25,4 +25,6 @@ export default (state = expensesReducerDefaultState, action) => {
     default:
       return state;
   }
+  console.log("expense.js reducer " + state + " " + action);
 };
+
