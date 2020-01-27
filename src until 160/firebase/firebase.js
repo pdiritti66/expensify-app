@@ -13,12 +13,8 @@ firebase.initializeApp(config);
 
 const database = firebase.database();
 
-const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
-
-export { firebase, googleAuthProvider, database as default };
-
 //consente di mettere a disposizione del chiamamte sia il db che frm firebase
-// export { firebase, database as default };
+export { firebase, database as default };
 
 // // child_removed
 // database.ref('expenses').on('child_removed', (snapshot) => {

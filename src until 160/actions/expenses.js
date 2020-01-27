@@ -27,6 +27,7 @@ export const startAddExpense = (expenseData = {}) => {
 };
 
 // REMOVE_EXPENSE
+
 export const removeExpense = ({ id } = {}) => ({
   type: 'REMOVE_EXPENSE',
   id
@@ -55,6 +56,29 @@ export const startEditExpense = (id, updates) => {
   };
 };
 
+
+
+// export const startSetExpenses;
+
+//1) fetch all data expense once
+//2) parse data into an array
+//3) Dispatch SET_EXPENSE
+//pattern step 1) and 2) from firebase.js follow from 54 to 66
+// // database.ref('expenses')
+// //   .once('value')
+// //   .then((snapshot) => {
+// //     const expenses = [];
+
+// //     snapshot.forEach((childSnapshot) => {
+// //       expenses.push({
+// //         id: childSnapshot.key,
+// //         ...childSnapshot.val()
+// //       });
+// //     });
+
+// //     console.log(expenses);
+// //   });
+
 // SET_EXPENSES
 export const setExpenses = (expenses) => ({
   type: 'SET_EXPENSES',
@@ -73,7 +97,8 @@ export const startSetExpenses = () => {
         });
       });
 
-      dispatch(setExpenses(expenses));
+      dispatch(setExpenses(expenses)); //rende disponibili allo stato dello store
+      //successivamente selezionate eventualmente dal selector ecc..
     });
   };
 };
