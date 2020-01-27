@@ -6,39 +6,7 @@ export const addExpense = (expense) => ({
   type: 'ADD_EXPENSE',
   expense
 });
-//in origine avevamo:
-// export const addExpense = (
-//   {
-//     description = '',
-//     note = '',
-//     amount = 0,
-//     createdAt = 0
-//   } = {}
-// ) => ({
-//   type: 'ADD_EXPENSE',
-//   expense: {
-//     id: uuid(),
-//     description,
-//     note,
-//     amount,
-//     createdAt
-//   }
-// });
-//l'azione era quella richiamata da AddExpensePage.js nei component
-// che viene dispatchata allo store che risolve il riduttore
-// di default è impostato ad oggetto vuoto (riga 16) e inizializzato (righe 9...15)
-//al tipo d'azione consenguente ADD_EXPENSE si 'ciuccia' i valori passati
 
-
-//l'alternativa ad inviare oggetti è qulla di inviare funzioni
-//ma per poterlo fare occorre installare un modulo (middleware redux)
-//che consente di farlo.
-//Ora questa funzione viene chiamata internamente da Redux e viene chiamata con Return.
-//ed è il dispatch. E' possibile farlo con il middleware.
-//tutto quello seguirà dopo => sarà dispatchato (riga 40)
-//per cui AddExpensePage.js importerà startAddExpense e la richiamerà al dispatch
-//startAddExpense richimerà a sua volta addExpense dandogli expense con i nuovi valori (..diffuso)
-//il reducer conseguente aggiorna l'elenco e passa l'oggetto tramite action (action.expense)
 export const startAddExpense = (expenseData = {}) => {
   return (dispatch) => {
     const {
@@ -47,23 +15,15 @@ export const startAddExpense = (expenseData = {}) => {
       amount = 0,
       createdAt = 0
     } = expenseData;
-    const expense = { description, note, amount, createdAt }; //li ricevo qui al posto delle
-    //righe 20-25
+    const expense = { description, note, amount, createdAt };
 
-    database.ref('expenses').push(expense).then((ref) => { //scrivo sul db
-      //se la push funziona inviamo a Redux richiamando addExpense a riga 5 sopra
-      //gli passo l'id da ref come ritorno da push
-      //e gli passo l'expense. L'impostazione dei valori predefiniti
-      // viene fatta a riga 41
-      //dopo aver ereditato expenseData anziché un oggetto vuoto {}
-      //, il quale normalmente è vuoto all'inizio
+    return database.ref('expenses').push(expense).then((ref) => {
       dispatch(addExpense({
         id: ref.key,
         ...expense
       }));
     });
   };
-  console.log("expense.js action");
 };
 
 // REMOVE_EXPENSE
@@ -78,3 +38,50 @@ export const editExpense = (id, updates) => ({
   id,
   updates
 });
+
+
+
+// export const startSetExpenses;
+
+//1) fetch all data expense once
+//2) parse data into an array
+//3) Dispatch SET_EXPENSE
+//pattern step 1) and 2) from firebase.js follow from 54 to 66
+// // database.ref('expenses')
+// //   .once('value')
+// //   .then((snapshot) => {
+// //     const expenses = [];
+
+// //     snapshot.forEach((childSnapshot) => {
+// //       expenses.push({
+// //         id: childSnapshot.key,
+// //         ...childSnapshot.val()
+// //       });
+// //     });
+
+// //     console.log(expenses);
+// //   });
+
+// SET_EXPENSES
+export const setExpenses = (expenses) => ({
+  type: 'SET_EXPENSES',
+  expenses
+});
+
+export const startSetExpenses = () => {
+  return (dispatch) => {
+    return database.ref('expenses').once('value').then((snapshot) => {
+      const expenses = [];
+
+      snapshot.forEach((childSnapshot) => {
+        expenses.push({
+          id: childSnapshot.key,
+          ...childSnapshot.val()
+        });
+      });
+
+      dispatch(setExpenses(expenses)); //rende disponibili allo stato dello store
+      //successivamente selezionate eventualmente dal selector ecc..
+    });
+  };
+};
